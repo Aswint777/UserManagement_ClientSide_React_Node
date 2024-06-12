@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 // import { UserLogin } from '../redux/actions/userActions'
 import { UserLogin } from '../redux/actions/UsersAction'
+import { useNavigate } from 'react-router-dom'
+
 
 const Login = () => {
+  const navigate = useNavigate()
   const [email,setEmail] = useState('')
   const [password,setPassword] = useState('')
 const dispatch =useDispatch();
@@ -13,7 +16,8 @@ const handleLogin = async(e)=>{
   e.preventDefault()
   console.log(email,password);
   dispatch(UserLogin({ email, password }))
-  console.log(user);
+  console.log(user,'.....................................................................');
+
   // try{
   //   const user = { userName , token : 'fake Token '}
   //   // dispatch(loginSuccess(user))
@@ -22,13 +26,22 @@ const handleLogin = async(e)=>{
   //   // dispatch(loginFailure('invalid credentials '))
   // }
 }
+useEffect(()=>{
+  if(user){
+    navigate('/LandingPage')
+  }
+  // else{
+  //   navigate('/')
+
+  // }
+},[user,navigate])
 
 // const handleInputChange =()=>{
 // }
 // const formdata = new FormData();
 // formdata.append(name,)
 
-  return (
+return (
 <>
 <div className="w-full">
         <div className="left-0 w-full mt-20 "></div>
@@ -72,7 +85,7 @@ const handleLogin = async(e)=>{
           </div>
         </div>
         
-      </div>
+    </div>
 </>
   )
 }

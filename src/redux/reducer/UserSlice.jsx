@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 // import { Login } from "../actions/userActions";
 // import { UserLogin } from "../actions/userActions";
-import { UserLogin } from "../actions/UsersAction";
+import { UserLogin, UserSignUp, getUser, logOut } from "../actions/UsersAction";
 
 const UserSlice = createSlice({
   name: "user",                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
@@ -24,23 +24,47 @@ const UserSlice = createSlice({
         state.loading = false;
         state.user = null;
         state.error = payload;
-      });
+      })
+      .addCase(UserSignUp.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.user = payload;
+        state.error = null;
+      })
+      .addCase(UserSignUp.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(UserSignUp.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.user = null;
+        state.error = payload;
+      })
+      .addCase(logOut.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.user = null;
+        state.error = null;
+      })
+      .addCase(logOut.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(logOut.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.user = null;
+        state.error = payload;
+      })
+      .addCase(getUser.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.user = payload;
+        state.error = null;
+      })
+      .addCase(getUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getUser.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.user = null;
+        state.error = payload;
+      })
   },
-  // extraReducers: (builder) => {
-  //   builder
-  //     .addCase(Login.fulfilled, (state, { payload }) => {
-  //       state.loading = false;
-  //       state.user = payload.users;
-  //       state.error = null;
-  //     })
-  //     .addCase(Login.pending, (state, { payload }) => {
-  //       state.loading = true;
-  //     })
-  //     .addCase(Login.rejected, (state, { payload }) => {
-  //       state.loading = false;
-  //       state.user = [];
-  //       state.error = payload.error;
-  //     });
-  // },
+  
 });
 export default UserSlice.reducer;
