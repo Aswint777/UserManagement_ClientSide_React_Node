@@ -5,29 +5,38 @@ import { UserSignUp } from "../redux/actions/UsersAction";
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const [userName,setUserName] = useState('')
-  const [email, setEmail ] = useState("");
-  const [ password, setPassword ] = useState("");
-  const [confirmPassword,setConfirmPassword] = useState('')
-  const dispatch = useDispatch()
-  const {loading,error,user} = useSelector((state)=>state.user)
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const dispatch = useDispatch();
+  const { loading, error, user } = useSelector((state) => state.user);
   const handleSignUp = async (e) => {
-    e.preventDefault()
-    console.log(userName,email,password,'lllllllllll');
-    dispatch(UserSignUp({ userName,email, password,confirmPassword }))
-    console.log(user,'llll');
-    console.log('hererererr');
+    e.preventDefault();
+    console.log(userName, email, password, "lllllllllll");
+    dispatch(UserSignUp({ userName, email, password, confirmPassword }));
+    console.log(user, "llll");
+    console.log(
+      error,
+      "--------------------------------------------------------"
+    );
+    console.log("hererererr");
   };
-
-  useEffect(()=>{
-    if(user){
-      navigate('/LandingPage')
+  useEffect(() => {
+    if (user) {
+      navigate("/");
     }
-    // else{
-    //   navigate('/')
-  
-    // }
-  },[user,navigate])
+  }, [user, navigate]);
+
+  // useEffect(()=>{
+  //   if(user){
+  //     navigate('/LandingPage')
+  //   }
+  //   // else{
+  //   //   navigate('/')
+
+  //   // }
+  // },[user,navigate])
 
   return (
     <>
@@ -47,7 +56,7 @@ const SignUp = () => {
                   type="text"
                   placeholder="User Name"
                   autoComplete="email"
-                  onChange={(e) =>setUserName(e.target.value)}
+                  onChange={(e) => setUserName(e.target.value)}
                 />
                 <p>Email</p>
                 <input
@@ -71,8 +80,11 @@ const SignUp = () => {
                   type="password"
                   placeholder="password"
                   autoComplete="current-password"
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                 />
+                <br />
+                <p className="text-red-700 flex justify-center">{error}</p>
+
                 <button className="bg-green-500 py-3 my-6 rounded font-bold ">
                   Sign Up
                 </button>

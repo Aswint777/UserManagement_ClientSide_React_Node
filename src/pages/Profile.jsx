@@ -3,15 +3,14 @@ import { UserLogin } from "../redux/actions/UsersAction";
 import { useDispatch, useSelector } from "react-redux";
 
 const Profile = () => {
-    const dispatch = useDispatch()
-    const { loading,error,user} = useSelector((state)=>state.user)
+  const dispatch = useDispatch();
+  const { loading, error, user } = useSelector((state) => state.user);
 
-    // dispatch(UserLogin({ email, password }))
-  console.log(user,'data is here profile page ');
+  // dispatch(UserLogin({ email, password }))
+  console.log(user, "data is here profile page ");
 
   return (
     <>
-    
       <div>
         <div className="container mx-auto mt-28">
           <div className="flex flex-wrap -mx-4">
@@ -61,10 +60,10 @@ const Profile = () => {
                       <p className="text-gray-500">{user?.date}</p>
                     </div>
                     <div className="col-span-1">
-                      <p className="text-gray-700">Address</p>
+                      {/* <p className="text-gray-700">Address</p>
                       <p className="text-gray-500">
                         Bay Area, San Francisco, CA
-                      </p>
+                      </p> */}
                     </div>
                   </div>
                 </div>

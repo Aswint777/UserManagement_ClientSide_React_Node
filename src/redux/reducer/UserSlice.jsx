@@ -1,10 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 // import { Login } from "../actions/userActions";
 // import { UserLogin } from "../actions/userActions";
-import { UserLogin, UserSignUp, getUser, logOut } from "../actions/UsersAction";
+import {
+  UserLogin,
+  UserSignUp,
+  adminDashboard,
+  getUser,
+  logOut,
+} from "../actions/UsersAction";
 
 const UserSlice = createSlice({
-  name: "user",                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+  name: "user",
   initialState: {
     user: [],
     loading: false,
@@ -64,7 +70,19 @@ const UserSlice = createSlice({
         state.user = null;
         state.error = payload;
       })
+      .addCase(adminDashboard.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.user = payload;
+        state.error = null;
+      })
+      .addCase(adminDashboard.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(adminDashboard.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.user = null;
+        state.error = payload;
+      });
   },
-  
 });
 export default UserSlice.reducer;
