@@ -136,3 +136,56 @@ export const userStatus = createAsyncThunk(
     }
   }
 );
+
+export const updateProfile = createAsyncThunk(
+  "user/updateUser",
+  async (userCredentials, { rejectWithValue }) => {
+    try {
+      console.log("zzzz");
+      console.log(userCredentials);
+      // console.log(data);
+      const res = await axios.post(
+        "http://localhost:3000/updateUserProfile",
+        userCredentials,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      return res.data;
+    } catch (error) {
+      console.log(error.response.data.error);
+      return rejectWithValue(error.response.data.error);
+    }
+  }
+);
+
+export const profilePhoto = createAsyncThunk(
+  "user/userProfilePhoto",
+  async (userCredentials, { rejectWithValue }) => {
+    try {
+      console.log("zzzz");
+      console.log(userCredentials);
+      // console.log(data);
+      const res = await axios.post(
+        "http://localhost:3000/userProfilePhoto",
+        userCredentials,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      );
+      return res.data;
+    } catch (error) {
+      console.log(error.response.data.error);
+      return rejectWithValue(error.response.data.error);
+    }
+  }
+);
+
+
+// multipart/form-data

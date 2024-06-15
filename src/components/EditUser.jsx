@@ -6,7 +6,7 @@ const EditUser = ({ editUserData, closeModal }) => {
 
   const handleEditUser = async (e) => {
     e.preventDefault();
-
+    
     const selectedValue = editValue;
     try {
       const res = await axios.post("http://localhost:3000/admin/editUserData", {

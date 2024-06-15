@@ -16,27 +16,13 @@ const SignUp = () => {
     console.log(userName, email, password, "lllllllllll");
     dispatch(UserSignUp({ userName, email, password, confirmPassword }));
     console.log(user, "llll");
-    console.log(
-      error,
-      "--------------------------------------------------------"
-    );
-    console.log("hererererr");
+    console.log(error);
   };
   useEffect(() => {
     if (user) {
       navigate("/");
     }
   }, [user, navigate]);
-
-  // useEffect(()=>{
-  //   if(user){
-  //     navigate('/LandingPage')
-  //   }
-  //   // else{
-  //   //   navigate('/')
-
-  //   // }
-  // },[user,navigate])
 
   return (
     <>
@@ -52,7 +38,7 @@ const SignUp = () => {
               >
                 <p>User Name</p>
                 <input
-                  className="py-3 my-2 p-4 bg-gray-200 rounded"
+                  className="py-3 my-2 p-4 bg-gray-200 rounded text-black"
                   type="text"
                   placeholder="User Name"
                   autoComplete="email"
@@ -60,7 +46,7 @@ const SignUp = () => {
                 />
                 <p>Email</p>
                 <input
-                  className="py-3 my-2 p-4 bg-gray-200 rounded "
+                  className="py-3 my-2 p-4 bg-gray-200 rounded text-black "
                   type="email"
                   placeholder="email"
                   autoComplete="email"
@@ -68,7 +54,7 @@ const SignUp = () => {
                 />
                 <p>Password</p>
                 <input
-                  className="py-3 p-4 my-2 bg-gray-200 rounded"
+                  className="py-3 p-4 my-2 bg-gray-200 rounded text-black"
                   type="password"
                   placeholder="password"
                   autoComplete="current-password"
@@ -76,7 +62,7 @@ const SignUp = () => {
                 />
                 <p>Confirm Password</p>
                 <input
-                  className="py-3 p-4 my-2 bg-gray-200 rounded"
+                  className="py-3 p-4 my-2 bg-gray-200 rounded text-black"
                   type="password"
                   placeholder="password"
                   autoComplete="current-password"

@@ -54,7 +54,7 @@ const Login = () => {
                 <p>Email</p>
                 <input
                   // onChange={(e)=>setEmail(e.target.value)}
-                  className="py-3 my-2 p-4 bg-gray-200 rounded "
+                  className="py-3 my-2 p-4 bg-gray-200 rounded text-black"
                   type="email"
                   placeholder="email"
                   autoComplete="email"
@@ -64,7 +64,7 @@ const Login = () => {
                 />
                 <p>Password</p>
                 <input
-                  className="py-3 p-4 my-2 bg-gray-200 rounded"
+                  className="py-3 p-4 my-2 bg-gray-200 rounded text-black"
                   type="password"
                   placeholder="password"
                   autoComplete="current-password"
