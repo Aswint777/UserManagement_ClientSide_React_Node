@@ -1,22 +1,23 @@
-import React, { useState } from "react";
-import { UserLogin, profilePhoto } from "../redux/actions/UsersAction";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { getUser, profilePhoto, UserLogin } from "../redux/actions/UsersAction";
 import ProfileEditComponent from "../components/ProfileEditComponent";
 
 const Profile = () => {
-  const [userProfileEdit, setUserProfileEdit] = useState();
-  const [userEditProfileModalOpen, setUserEditProfileModalOpen] =useState(false); 
+  const [userProfileEdit, setUserProfileEdit] = useState(null);
+  const [userEditProfileModalOpen, setUserEditProfileModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
 
   const dispatch = useDispatch();
   const { loading, error, user } = useSelector((state) => state.user);
+  useEffect(()=> {
+    console.log("inside useEffect");
+    dispatch(getUser())
+  },[userEditProfileModalOpen,selectedFile])
+  
 
-  // dispatch(UserLogin({ email, password }))
-  console.log(user, "data is here profile page ");
 
   const openEditProfileModal = (user) => {
-    console.log("lllll");
-    console.log(user);
     setUserEditProfileModalOpen(true);
     setUserProfileEdit(user);
   };
@@ -27,20 +28,18 @@ const Profile = () => {
   };
 
   const handleFileChange = (event) => {
-    console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
     setSelectedFile(event.target.files[0]);
-    console.log(event.target.files[0]);
-    
   };
-  const editProfilePhoto = async(req,res)=>{
-    
-    
-    console.log('iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
-    console.log(selectedFile,'ppp')
-    console.log('iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
-    dispatch(profilePhoto({selectedFile}))
-  }
 
+  const editProfilePhoto = () => {
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append("profilePhoto", selectedFile);
+      formData.append("_id", user._id); // Assuming user object contains _id
+      dispatch(profilePhoto(formData));
+      dispatch(getUser())
+    }
+  };
 
   return (
     <>
@@ -49,36 +48,26 @@ const Profile = () => {
           <div className="flex flex-wrap -mx-4">
             <div className="w-full lg:w-1/3 px-4 mb-4">
               <div className="bg-white rounded-lg shadow-md p-6 text-center border-2 m-2">
-              <input type="file" className="" onChange={handleFileChange}/>
+                <input type="file" onChange={handleFileChange} />
                 <img
-                  src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                  src={user?.profilePhoto ? `http://localhost:3000/${user.profilePhoto}` : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}
                   alt="avatar"
-                  className="rounded-full w-32 mx-auto mb-4"
+                  className="rounded-full w-36 h-36 mx-auto mb-4"
                 />
                 <p className="text-gray-700 mb-1">{user?.userName}</p>
-                {/* <p className="text-gray-500 mb-4">
-                  Bay Area, San Francisco, CA
-                </p> */}
-                {/* <div className="flex justify-center space-x-2">
-                  <button className="bg-blue-500 text-white px-4 py-2 rounded">
-                    Follow
-                  </button>
-                  <button className="border border-blue-500 text-blue-500 px-4 py-2 rounded">
-                    Message
-                  </button>
-                </div> */}
               </div>
-              <button className="border-2 flex justify-center ml-32 p-2 bg-red-600 rounded-md m-2"
-              onClick={editProfilePhoto}>
-                
-                Edit Profile photo
+              <button
+                className="border-2 flex justify-center ml-32 p-2 bg-red-600 rounded-md m-2"
+                onClick={editProfilePhoto}
+              >
+                Edit Profile Photo
               </button>
             </div>
 
             <div className="w-full lg:w-2/3 px-4 mb-4">
               <div className="bg-white rounded-lg shadow-md p-4 border-2 m-2">
-                <div className="mb-4 ">
-                  <div className="flex justify-between ">
+                <div className="mb-4">
+                  <div className="flex justify-between">
                     <h3 className="text-lg font-semibold mb-2">
                       Profile Information
                     </h3>
@@ -105,12 +94,6 @@ const Profile = () => {
                     <div className="col-span-1">
                       <p className="text-gray-700">Profile Created</p>
                       <p className="text-gray-500">{user?.date}</p>
-                    </div>
-                    <div className="col-span-1">
-                      {/* <p className="text-gray-700">Address</p>
-                      <p className="text-gray-500">
-                        Bay Area, San Francisco, CA
-                      </p> */}
                     </div>
                   </div>
                 </div>

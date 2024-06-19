@@ -1,10 +1,13 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+
 
 const CreateUser = ({ closeModal }) => {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch =useDispatch()
 
   const handleCreateUser = async (e) => {
     e.preventDefault();
@@ -17,7 +20,10 @@ const CreateUser = ({ closeModal }) => {
         password,
       });
       console.log(res.data);
+      // dispatch(adminCreateUser({userName,email,password}))
+      // const { loading, error, user } = useSelector((state) => state.user);
       closeModal();
+      
     } catch (error) {
       console.error("Error updating user:", error);
     }

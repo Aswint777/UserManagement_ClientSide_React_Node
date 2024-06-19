@@ -1,53 +1,56 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-// import { adminDashboard, userStatus } from '../redux/actions/UsersAction'
-import axios, { Axios } from "axios";
+import axios from "axios";
 import { FaRegEdit } from "react-icons/fa";
 import EditUser from "../components/EditUser";
 import CreateUser from "../components/CreateUser";
 
 const AdminDashboard = () => {
-  const dispatch = useDispatch();
-  const [user, setUser] = useState([]);
-  // const [block,setBlock] = useState('')
+  const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isCreateModelOpen, setIsCreateModelOpen] = useState(false);
-
-  const [editUser, setEditUser] = useState();
-  const [editUserData, setEditUserData] = useState();
+  const [editUserData, setEditUserData] = useState(null);
+  const [changeStatus,setChangeStatus] = useState('')
 
   useEffect(() => {
+    const fetchData = async () => {
+      const res = await axios.get("http://localhost:3000/admin/AdminDashboard");
+      setUsers(res.data);
+      setFilteredUsers(res.data);
+    };
     fetchData();
-  }, []);
+    
+  }, [isCreateModelOpen,editUserData,changeStatus]);
 
-  const fetchData = async () => {
-    const res = await axios.get("http://localhost:3000/admin/AdminDashboard");
-    setUser(res.data);
+  const handleClickStatus = async(userId)=>{
+    const isConfirmed = confirm('Are you sure?');
+    if(isConfirmed == true){
+      setChangeStatus(userId)
+      console.log(changeStatus,'ooops');
+      handleChange(userId)
+
+    }
+  }
+
+
+  const handleChange = async (userId) => {
+    try {
+      const res = await axios.post("http://localhost:3000/admin/userStatus", { userId });
+      if (res.data.success) {
+        const updatedUsers = users.map(user =>
+          user._id === userId ? { ...user, status: res.data.status } : user
+        );
+        setUsers(updatedUsers);  // Update users state with new status
+        setFilteredUsers(updatedUsers);  // Update filteredUsers state as well
+        
+      }
+    } catch (error) {
+      console.error("Error updating user status:", error);
+    }
   };
-
-  const handleChange = async (e) => {
-    const selectedValue = e;
-
-    const res = await axios.post("http://localhost:3000/admin/userStatus", {
-      selectedValue,
-    });
-    fetchData();
-  };
-
-  //   const handleEditUser = async (updatedUserData) => {
-  //     await axios.post('http://localhost:3000/admin/editUserData', updatedUserData);
-  //     setIsEditModalOpen(false);
-  //     fetchData(); // Refetch data to update the UI
-  // };
-
-  //   const editUserState = (user)=>{
-  //       console.log(user);
-  //       console.log('edit user');
-  //       setEditUserData( user)
-  //       }
 
   const openEditModal = (user) => {
-    console.log("lllll");
     setIsEditModalOpen(true);
     setEditUserData(user);
   };
@@ -58,14 +61,24 @@ const AdminDashboard = () => {
   };
 
   const openCreateModal = () => {
-    console.log("lllll");
     setIsCreateModelOpen(true);
-    // setEditUserData(user);
   };
 
   const closeCreateModal = () => {
     setIsCreateModelOpen(false);
-    // setEditUserData(null);
+  };
+
+  const handleSearch = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+    if (query === "") {
+      setFilteredUsers(users);
+    } else {
+      const filtered = users.filter((u) =>
+        u.userName.toLowerCase().includes(query)
+      );
+      setFilteredUsers(filtered);
+    }
   };
 
   return (
@@ -87,6 +100,13 @@ const AdminDashboard = () => {
                 >
                   Create
                 </button>
+                <input
+                  type="text"
+                  placeholder="Search by username"
+                  value={searchQuery}
+                  onChange={handleSearch}
+                  className="form-control mb-3 w-1/3 mx-auto flex justify-center p-2 border-2 rounded-lg border-green-500"
+                />
                 <table className="table table-striped hover nowrap user-table mb-0 w-full">
                   <thead className="border-2 ml-96 w-full">
                     <tr>
@@ -123,7 +143,7 @@ const AdminDashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {user.map((user, index) => (
+                    {filteredUsers.map((user, index) => (
                       <tr className="border-2" key={user._id}>
                         <td className="flex justify-center">{index + 1}</td>
                         <td>
@@ -142,15 +162,21 @@ const AdminDashboard = () => {
                           <br />
                         </td>
                         <td>
-                          <select
-                            className="form-control category-select w-28 text-gray-700 border rounded border-gray-300 py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50"
-                            onChange={(e) =>
-                              handleChange(user._id, e.target.value)
-                            }
-                          >
-                            <option value="Block">Block</option>
-                            <option value="Un Block">Un Block</option>
-                          </select>
+                          {user.status ? (
+                            <button
+                              className="btn btn-outline-danger p-2 border-2 bg-red-500 justify-center flex rounded-lg"
+                              onClick={() => handleClickStatus(user._id)}
+                            >
+                              Block
+                            </button>
+                          ) : (
+                            <button
+                              className="btn btn-outline-success p-2 border-2 bg-green-500 justify-center flex rounded-lg"
+                              onClick={() => handleClickStatus(user._id)}
+                            >
+                              Unblock
+                            </button>
+                          )}
                         </td>
                         <td>
                           <button
@@ -178,4 +204,5 @@ const AdminDashboard = () => {
     </>
   );
 };
+
 export default AdminDashboard;

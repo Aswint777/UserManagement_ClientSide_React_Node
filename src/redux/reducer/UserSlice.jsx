@@ -7,6 +7,7 @@ import {
   adminDashboard,
   getUser,
   logOut,
+  profilePhoto,
   updateProfile,
 } from "../actions/UsersAction";
 
@@ -17,6 +18,13 @@ const UserSlice = createSlice({
     loading: false,
     error: null,
   },
+  // reducers:
+  // {
+  //   // changeStatus:({payload})=>{
+  //   //   const statusChange = user.map((user) => user.userId ==)
+  //   // }
+  // },
+
   extraReducers: (builder) => {
     builder
     //login
@@ -99,7 +107,37 @@ const UserSlice = createSlice({
         state.loading = true;
 
       })
-      .addCase(updateProfile .rejected, (state, { payload }) => {
+      .addCase(updateProfile.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.user = null;
+        state.error = payload;
+      })
+      // // create user by admin
+      // .addCase(adminCreateUser.fulfilled, (state, { payload }) => {
+      //   state.loading = false;
+      //   state.user = payload;
+      //   state.error = null;
+      // })
+      // .addCase(adminCreateUser.pending, (state) => {
+      //   state.loading = true;
+      // })
+      // .addCase(adminCreateUser.rejected, (state, { payload }) => {
+      //   state.loading = false;
+      //   state.user = null;
+      //   state.error = payload;
+      // })
+
+      // profile photo update 
+      .addCase(profilePhoto.fulfilled,(state,{payload})=>{
+        state.loading = false
+        state.user=payload
+        state.error = null
+      })
+      .addCase(profilePhoto.pending,(state)=>{
+        state.loading = true;
+
+      })
+      .addCase(profilePhoto.rejected, (state, { payload }) => {
         state.loading = false;
         state.user = null;
         state.error = payload;

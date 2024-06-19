@@ -75,6 +75,7 @@ export const logOut = createAsyncThunk(
 export const getUser = createAsyncThunk(
   "user/getUser",
   async (_, { rejectWithValue }) => {
+    console.log('get user');
     try {
       const { data } = await axios.get("http://localhost:3000/getUser", {
         headers: {
@@ -186,6 +187,31 @@ export const profilePhoto = createAsyncThunk(
     }
   }
 );
+
+// export const adminCreateUser = createAsyncThunk(
+//   "user/adminCreateUser",
+//   async (userCredentials, { rejectWithValue }) => {
+//     try {
+//       console.log("zzzz");
+//       console.log(userCredentials);
+//       // console.log(data);
+//       const res = await axios.post(
+// "http://localhost:3000/admin/createUser",
+//         userCredentials,
+//         {
+//           headers: {
+//             "Content-Type": "application/json",
+//           },
+//           withCredentials: true,
+//         }
+//       );
+//       return res.data;
+//     } catch (error) {
+//       console.log(error.response.data.error);
+//       return rejectWithValue(error.response.data.error);
+//     }
+//   }
+// );
 
 
 // multipart/form-data
